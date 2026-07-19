@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Our Products – Pitambara Doodh Dairy</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Browse our organic dairy products catalog. Purchase fresh pasteurized milk, traditional bilona ghee, soft block paneer, and probiotic curd.">
+    <meta name="author" content="Vandana Purohit, Deelip Purohit">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6 Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Custom Style sheets -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+
+    <!-- 1. Scroll Progress Bar -->
+    <div class="scroll-progress-container">
+        <div class="scroll-progress-bar" id="scrollProgress"></div>
+    </div>
+
+    <!-- 2. Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top navbar-custom scrolled">
+        <div class="container">
+            <a class="navbar-brand navbar-brand-custom" href="index.html">
+                <img src="assets/images/logo.png" alt="Pitambara Doodh Dairy Logo" class="brand-logo-img">
+                <span class="brand-title-main">Pitambara Doodh Dairy</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+                <div class="navbar-collapse-custom d-lg-flex align-items-center">
+                    <ul class="navbar-nav mb-2 mb-lg-0 me-4">
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-custom" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-custom" href="about-us.html">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-custom active" href="products-catalog.html">Products</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-custom" href="about-us.html#founders">Owners</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-custom" href="contact-us.html">Contact</a>
+                        </li>
+                    </ul>
+                    <a href="products-catalog.html" class="btn-premium btn-blue text-white">Order Now</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 3. Inner Header -->
+    <header class="inner-header">
+        <div class="inner-header-bg" style="background-image: url('assets/images/hero-farm.jpg');"></div>
+        <div class="inner-header-overlay"></div>
+        <div class="container inner-header-container">
+            <h1 class="inner-header-title">Our Products</h1>
+            <ul class="breadcrumb-custom">
+                <li class="breadcrumb-item-custom"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item-custom active">Products</li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- 4. Products Grid with Client Side Filtering -->
+    <section class="about-section bg-white">
+        <div class="container">
+            <div class="gallery-filters mb-5">
+                <button class="gallery-filter-btn active" data-filter-prod="all">All Products</button>
+                <button class="gallery-filter-btn" data-filter-prod="milk">Fresh Milk</button>
+                <button class="gallery-filter-btn" data-filter-prod="ghee">Pure Ghee</button>
+                <button class="gallery-filter-btn" data-filter-prod="paneer">Fresh Paneer</button>
+                <button class="gallery-filter-btn" data-filter-prod="curd">Fresh Curd</button>
+            </div>
+            
+            <div class="row g-4" id="productsCatalog">
+                <!-- Product 1 -->
+                <div class="col-lg-4 col-md-6 product-catalog-item" data-category-prod="milk">
+                    <div class="glass-card product-card h-100">
+                        <div class="product-img-box">
+                            <img src="assets/products/milk.jpg" alt="Fresh Milk">
+                            <span class="product-tag available">Available</span>
+                        </div>
+                        <div class="product-body">
+                            <h4 class="product-title">Fresh Buffalo Milk</h4>
+                            <div class="product-price">₹55 <span class="fs-6 text-muted">/ Litre</span></div>
+                            <p class="product-desc">High fat, thick, and creamy buffalo milk. Excellent for making traditional homemade curd and desserts.</p>
+                            <a href="#" class="btn-premium btn-blue btn-order-now w-100" data-product="Fresh Buffalo Milk">Order Now</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="col-lg-4 col-md-6 product-catalog-item" data-category-prod="milk">
+                    <div class="glass-card product-card h-100">
+                        <div class="product-img-box">
+                            <img src="assets/images/hero-milk-glass.png" alt="Fresh Cow Milk" style="background-color: var(--bg-light); object-fit: contain; padding: 20px;">
+                            <span class="product-tag available">Available</span>
+                        </div>
+                        <div class="product-body">
+                            <h4 class="product-title">Fresh Cow Milk</h4>
+                            <div class="product-price">₹45 <span class="fs-6 text-muted">/ Litre</span></div>
+                            <p class="product-desc">Light, easily digestible, and vitamin-D rich cow milk. Ideal for children and daily drinking requirements.</p>
+                            <a href="#" class="btn-premium btn-blue btn-order-now w-100" data-product="Fresh Cow Milk">Order Now</a>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Product 4 -->
+                <div class="col-lg-4 col-md-6 product-catalog-item" data-category-prod="ghee">
+                    <div class="glass-card product-card h-100">
+                        <div class="product-img-box">
+                            <img src="assets/products/ghee.jpg" alt="Pure Desi Ghee">
+                            <span class="product-tag available">Available</span>
+                        </div>
+                        <div class="product-body">
+                            <h4 class="product-title">Premium Buffalo Ghee</h4>
+                            <div class="product-price">₹750 <span class="fs-6 text-muted">/ Kg</span></div>
+                            <p class="product-desc">Traditional white buffalo ghee, granular, rich in healthy fats, and perfect for roasting and daily cooking.</p>
+                            <a href="#" class="btn-premium btn-blue btn-order-now w-100" data-product="Premium Buffalo Ghee">Order Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 5 -->
+                <div class="col-lg-4 col-md-6 product-catalog-item" data-category-prod="paneer">
+                    <div class="glass-card product-card h-100">
+                        <div class="product-img-box">
+                            <img src="assets/products/paneer.jpg" alt="Fresh Paneer">
+                            <span class="product-tag available">Available</span>
+                        </div>
+                        <div class="product-body">
+                            <h4 class="product-title">Fresh Paneer (Malai)</h4>
+                            <div class="product-price">₹300 <span class="fs-6 text-muted">/ Kg</span></div>
+                            <p class="product-desc">Soft, creamy, and melt-in-the-mouth cottage cheese blocks. Extracted using clean food grade standards.</p>
+                            <a href="#" class="btn-premium btn-blue btn-order-now w-100" data-product="Fresh Paneer (Malai)">Order Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 6 -->
+                <div class="col-lg-4 col-md-6 product-catalog-item" data-category-prod="curd">
+                    <div class="glass-card product-card h-100">
+                        <div class="product-img-box">
+                            <img src="assets/products/curd.jpg" alt="Fresh Curd">
+                            <span class="product-tag available">Available</span>
+                        </div>
+                        <div class="product-body">
+                            <h4 class="product-title">Fresh Curd (Dahi)</h4>
+                            <div class="product-price">₹60 <span class="fs-6 text-muted">/ Kg</span></div>
+                            <p class="product-desc">Thick, delicious, probiotic-rich curd set traditionally to promote digestion and vitality.</p>
+                            <a href="#" class="btn-premium btn-blue btn-order-now w-100" data-product="Fresh Curd (Dahi)">Order Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Footer -->
+    <footer class="footer-section">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <a class="footer-logo" href="index.html">
+                        <img src="assets/images/logo.png" alt="Pitambara Doodh Dairy Logo" class="brand-logo-img">
+                        <span class="brand-title-main">Pitambara Doodh Dairy</span>
+                    </a>
+                    <p class="footer-desc">Delivering pure, fresh, and nutritious milk, desi ghee, paneer, and curd. Rooted in traditional Indian goodness.</p>
+                    <div class="footer-socials">
+                        <a href="#" class="footer-social-link"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="footer-social-link"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="footer-social-link"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="#" class="footer-social-link"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h5 class="footer-title">Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about-us.html">About Us</a></li>
+                        <li><a href="products-catalog.html">Our Products</a></li>
+
+                        <li><a href="contact-us.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h5 class="footer-title">Products</h5>
+                    <ul class="footer-links">
+                        <li><a href="products-catalog.html">Fresh Milk</a></li>
+                        <li><a href="products-catalog.html">Pure Desi Ghee</a></li>
+                        <li><a href="products-catalog.html">Fresh Paneer</a></li>
+                        <li><a href="products-catalog.html">Fresh Curd</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="footer-title">Delivery Timings</h5>
+                    <p class="footer-desc mb-3">We deliver fresh milk directly to your doorstep twice a day, 365 days a year:</p>
+                    <p class="footer-desc mb-2"><i class="fa-regular fa-clock me-2 text-warning"></i> <strong>Morning:</strong> 6:00 AM - 8:30 AM</p>
+                    <p class="footer-desc mb-0"><i class="fa-regular fa-clock me-2 text-warning"></i> <strong>Evening:</strong> 5:30 PM - 7:30 PM</p>
+                </div>
+            </div>
+            
+            <div class="row footer-bottom align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="footer-copy">&copy; 2026 Pitambara Dudh Dairy. All rights reserved. Designed with ❤️ for Pitambara Dudh Dairy</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
+                    <div class="footer-bottom-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms & Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/917817873319?text=Hello%20Pitambara%20Doodh%20Dairy!%20I'd%20like%20to%20inquire%20about%20your%20products." class="whatsapp-float" target="_blank" aria-label="Contact us on WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top" id="backToTop" aria-label="Back to Top">
+        <i class="fa-solid fa-arrow-up"></i>
+    </div>
+
+    <!-- Buy / Order Modal -->
+    <div class="buy-modal" id="buyModal">
+        <div class="glass-card buy-modal-card">
+            <div class="buy-modal-header">
+                <h3>Place Order - <span id="modalProductName">Product</span></h3>
+                <button class="buy-modal-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="buy-modal-body bg-white">
+                <form id="orderForm">
+                    <div class="form-group-custom">
+                        <label class="form-label-custom" for="orderName">Your Name</label>
+                        <input type="text" class="form-control-custom" id="orderName" placeholder="Enter your name" required>
+                    </div>
+                    <div class="form-group-custom">
+                        <label class="form-label-custom" for="orderPhone">Phone Number</label>
+                        <input type="tel" class="form-control-custom" id="orderPhone" placeholder="Enter mobile number" required>
+                    </div>
+                    <div class="form-group-custom">
+                        <label class="form-label-custom" for="orderQuantity">Quantity Needed</label>
+                        <select class="form-control-custom" id="orderQuantity" required>
+                            <option value="1 Unit">1 Unit (Ltr/Kg)</option>
+                            <option value="2 Units">2 Units (Ltr/Kg)</option>
+                            <option value="5 Units">5 Units (Ltr/Kg)</option>
+                            <option value="10 Units">10 Units (Ltr/Kg)</option>
+                            <option value="Daily Subscription">Daily Subscription</option>
+                        </select>
+                    </div>
+                    <div class="form-group-custom">
+                        <label class="form-label-custom" for="orderNote">Address & Special Notes (Optional)</label>
+                        <textarea class="form-control-custom" id="orderNote" rows="3" placeholder="Enter delivery address and timing preference"></textarea>
+                    </div>
+                    <button type="submit" class="btn-premium btn-blue w-100 mt-2"><i class="fa-brands fa-whatsapp"></i> Confirm & Order on WhatsApp</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 Bundle JS (with Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- GSAP CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/gsap.js"></script>
+    
+    <!-- Page Specific Filter Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const filterButtons = document.querySelectorAll('[data-filter-prod]');
+            const catalogItems = document.querySelectorAll('.product-catalog-item');
+
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Update active button
+                    filterButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    const category = btn.getAttribute('data-filter-prod');
+                    
+                    catalogItems.forEach(item => {
+                        const itemCat = item.getAttribute('data-category-prod');
+                        if (category === 'all' || itemCat === category) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+/* 
+   Pitambara Dudh Dairy – Responsiveness Stylesheet
+   Contains media queries for devices (mobile, tablet, small laptops)
+*/
+
+@media (max-width: 1200px) {
+    .hero-title {
+        font-size: 3.25rem;
+    }
+}
+
+@media (max-width: 991px) {
+    /* Navbar styling on collapsed mobile menus */
+    .navbar-collapse-custom {
+        background: var(--primary-white);
+        border-radius: 16px;
+        padding: 20px;
+        margin-top: 15px;
+        box-shadow: var(--shadow-premium);
+        border: 1px solid var(--border-glass);
+    }
+    
+    .nav-link-custom::after {
+        display: none;
+    }
+    
+    .nav-link-custom {
+        padding: 10px 15px !important;
+    }
+
+    .navbar-collapse-custom .nav-link-custom {
+        color: var(--text-dark) !important; /* dark links inside mobile drop menu */
+    }
+
+    .nav-link-custom.active, 
+    .nav-link-custom:hover {
+        background-color: rgba(0, 119, 230, 0.05);
+        color: var(--milk-blue) !important;
+        border-radius: 8px;
+    }
+
+    /* Hero Section Adjustments */
+    .hero-section {
+        padding: 140px 0 60px;
+        text-align: center;
+    }
+    
+    .hero-subtitle {
+        margin: 0 auto 30px;
+    }
+    
+    .hero-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+    
+    .hero-image-wrapper {
+        margin-top: 60px;
+    }
+    
+    .hero-image-wrapper img {
+        max-height: 400px;
+    }
+
+
+
+    /* Timeline Adjustments */
+    .timeline-line {
+        left: 30px;
+    }
+
+    .timeline-item {
+        width: 100%;
+        padding-left: 70px;
+        padding-right: 0;
+        text-align: left !important;
+    }
+
+    .timeline-item:nth-child(even) {
+        left: 0;
+    }
+
+    .timeline-badge {
+        left: 14px !important;
+        right: auto !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 2.25rem;
+    }
+    
+    .hero-title {
+        font-size: 2.75rem;
+    }
+    
+    .about-section {
+        padding: 60px 0;
+    }
+    
+    .features-section,
+    .process-section,
+    .owners-section,
+    .testimonials-section,
+    .contact-section {
+        padding: 80px 0;
+    }
+    
+    .about-row {
+        gap: 30px;
+    }
+    
+    .about-row.flex-row-reverse {
+        flex-direction: column !important;
+    }
+
+    .stat-item {
+        margin-bottom: 30px;
+    }
+    
+    .stat-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .contact-info-box,
+    .contact-form-box {
+        padding: 30px 20px;
+    }
+
+    .map-wrapper {
+        height: 350px;
+    }
+
+    .footer-bottom {
+        text-align: center;
+        gap: 20px;
+    }
+    
+    .footer-bottom-links {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-title {
+        font-size: 2.25rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.05rem;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+        max-width: 280px;
+        margin: 0 auto;
+    }
+    
+    .hero-buttons .btn-premium {
+        width: 100%;
+    }
+    
+
+
+    .testimonial-card {
+        padding: 30px 20px;
+    }
+
+    .testimonial-text {
+        font-size: 1rem;
+    }
+    
+    .whatsapp-float,
+    .back-to-top {
+        bottom: 20px;
+        width: 44px;
+        height: 44px;
+        font-size: 18px;
+    }
+
+    .whatsapp-float {
+        left: 20px;
+    }
+
+    .back-to-top {
+        right: 20px;
+    }
+
+    /* Mobile Brand Logo & Text adjustments */
+    .brand-logo-img {
+        height: 45px !important;
+    }
+    
+    .brand-title-main {
+        font-size: 1.15rem !important;
+    }
+}

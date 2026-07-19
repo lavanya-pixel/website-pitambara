@@ -1,0 +1,90 @@
+/* 
+   Pitambara Dudh Dairy – Animations Stylesheet
+   Contains base CSS animations, keyframes, transitions, and floating effects
+*/
+
+/* Floating milk glass animation */
+@keyframes floatMilkGlass {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* Rotating splash animation */
+@keyframes rotateSplash {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Base fade up reveal style for fallback (before GSAP loads or as helper) */
+.reveal-fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.reveal-fade-up.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Floating milk drops / bubbles container */
+.milk-drops-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    overflow: hidden;
+}
+
+/* Individual milk droplet styles */
+.milk-drop {
+    position: absolute;
+    bottom: -50px;
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(1px);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: riseUp linear infinite;
+}
+
+.milk-drop::after {
+    content: '';
+    position: absolute;
+    top: 15%;
+    left: 15%;
+    width: 30%;
+    height: 30%;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+}
+
+@keyframes riseUp {
+    0% {
+        transform: translateY(0) scale(0.5);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8;
+    }
+    90% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(-105vh) scale(1.2);
+        opacity: 0;
+    }
+}
