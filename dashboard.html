@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite AI Performance Command & Weak-Area Reminder System</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome & Chart.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --bg-primary: #0b0f19;
+            --bg-secondary: #111827;
+            --bg-card: rgba(17, 24, 39, 0.85);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --accent-green: #10b981;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-amber: #f59e0b;
+            --accent-rose: #f43f5e;
+            --accent-cyan: #06b6d4;
+            --text-primary: #f9fafb;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --glass-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 24px;
+            background-image: 
+                radial-gradient(at 10% 10%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 90% 90%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .dashboard-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Header */
+        header {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(16px);
+            border-radius: 24px;
+            padding: 20px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--glass-shadow);
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .brand h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #34d399 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand p { color: var(--text-secondary); font-size: 13px; margin-top: 4px; }
+
+        .tab-switcher {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-color);
+            padding: 4px;
+            border-radius: 16px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Weak Area Reminders Banner */
+        .reminder-banner {
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.12) 0%, rgba(245, 158, 11, 0.12) 100%);
+            border: 1px solid rgba(244, 63, 94, 0.3);
+            border-radius: 20px;
+            padding: 20px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .reminder-banner-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .reminder-banner-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--accent-rose);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .reminder-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 14px;
+        }
+
+        .reminder-card {
+            background: rgba(17, 24, 39, 0.8);
+            border: 1px solid rgba(244, 63, 94, 0.25);
+            border-radius: 14px;
+            padding: 14px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+        }
+
+        .reminder-tag {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--accent-amber);
+            background: rgba(245, 158, 11, 0.15);
+            padding: 3px 8px;
+            border-radius: 6px;
+            width: fit-content;
+        }
+
+        .reminder-text { font-size: 13px; font-weight: 600; color: #f3f4f6; }
+        .reminder-remedy { font-size: 12px; color: var(--text-secondary); line-height: 1.4; }
+
+        .reminder-btn {
+            background: rgba(244, 63, 94, 0.15);
+            border: 1px solid rgba(244, 63, 94, 0.3);
+            color: var(--accent-rose);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            align-self: flex-start;
+            margin-top: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .reminder-btn:hover { background: var(--accent-rose); color: white; }
+
+        /* Action Bar */
+        .action-bar {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 16px 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .action-group { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+
+        .btn {
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn:hover { transform: translateY(-2px); opacity: 0.95; }
+        .btn-green { background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-cyan) 100%); }
+        .btn-amber { background: linear-gradient(135deg, var(--accent-amber) 0%, var(--accent-rose) 100%); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-color); color: var(--text-primary); }
+
+        .form-control {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .scores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 16px;
+        }
+
+        .score-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .score-header { display: flex; justify-content: space-between; align-items: center; color: var(--text-secondary); font-size: 13px; font-weight: 600; }
+        .score-icon { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+        .score-val { font-family: 'Outfit', sans-serif; font-size: 30px; font-weight: 800; color: var(--text-primary); }
+        .score-bar { height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 9999px; overflow: hidden; }
+        .score-fill { height: 100%; border-radius: 9999px; transition: width 1s ease-out; }
+
+        .main-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
+        @media (max-width: 1024px) { .main-grid { grid-template-columns: 1fr; } }
+
+        .card { background: var(--bg-card); border: 1px solid var(--border-color); backdrop-filter: blur(12px); border-radius: 24px; padding: 24px; box-shadow: var(--glass-shadow); }
+        .card-title { font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; }
+        .card-title span { display: flex; align-items: center; gap: 10px; }
+
+        .view-section { display: flex; flex-direction: column; gap: 24px; }
+        .hidden { display: none !important; }
+
+        .monthly-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; }
+        .stat-card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+        .stat-label { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
+        .stat-val { font-family: 'Outfit', sans-serif; font-size: 26px; font-weight: 800; }
+        .stat-delta { font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+
+        .heatmap-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-top: 14px; }
+        .heatmap-cell { aspect-ratio: 1; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: white; cursor: pointer; }
+        .cell-hit { background: rgba(16, 185, 129, 0.35); border: 1px solid var(--accent-green); color: #34d399; }
+        .cell-partial { background: rgba(245, 158, 11, 0.35); border: 1px solid var(--accent-amber); color: #fbbf24; }
+        .cell-miss { background: rgba(244, 63, 94, 0.35); border: 1px solid var(--accent-rose); color: #fb7185; }
+
+        .schedule-list, .priority-list, .habit-list { display: flex; flex-direction: column; gap: 12px; }
+        .schedule-item { display: flex; align-items: center; gap: 16px; padding: 14px 18px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 16px; }
+        .time-badge { font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 700; color: var(--accent-blue); background: rgba(59, 130, 246, 0.12); padding: 6px 12px; border-radius: 8px; min-width: 130px; text-align: center; }
+        .schedule-desc { flex-grow: 1; font-size: 14px; font-weight: 500; }
+        .schedule-check { width: 22px; height: 22px; accent-color: var(--accent-green); cursor: pointer; }
+        .del-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px; }
+        .del-btn:hover { color: var(--accent-rose); }
+
+        .priority-item { display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: rgba(255, 255, 255, 0.03); border-left: 4px solid var(--accent-purple); border-radius: 12px; }
+        .priority-num { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 16px; color: var(--accent-purple); }
+        .priority-text { font-size: 14px; font-weight: 600; flex-grow: 1; }
+
+        .habit-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 14px; }
+        .habit-info { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 600; }
+        .streak-badge { font-size: 12px; color: var(--accent-amber); background: rgba(245, 158, 11, 0.15); padding: 4px 10px; border-radius: 9999px; font-weight: 700; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); display: none; open; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-card { background: #111827; border: 1px solid var(--border-color); border-radius: 24px; padding: 28px; width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 18px; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 700; }
+
+        .chart-container { position: relative; height: 280px; width: 100%; }
+        .analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        @media (max-width: 768px) { .analytics-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <!-- Header -->
+    <header>
+        <div class="brand">
+            <h1><i class="fa-solid fa-brain"></i> Elite AI Performance Command & Weak-Area Diagnostic Center</h1>
+            <p>Real-Time Bio-Analytics, Automated Reminders & Weak-Area Optimization</p>
+        </div>
+
+        <div class="tab-switcher">
+            <button class="tab-btn active" id="tabDaily" onclick="switchTab('daily')">
+                <i class="fa-solid fa-calendar-day"></i> Daily View
+            </button>
+            <button class="tab-btn" id="tabMonthly" onclick="switchTab('monthly')">
+                <i class="fa-solid fa-chart-area"></i> Monthly Progress View
+            </button>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button class="btn btn-green" onclick="saveState()"><i class="fa-solid fa-floppy-disk"></i> Save Dashboard</button>
+        </div>
+    </header>
+
+    <!-- AUTOMATED WEAK-AREA REMINDERS BANNER -->
+    <div class="reminder-banner" id="reminderBanner">
+        <div class="reminder-banner-header">
+            <div class="reminder-banner-title">
+                <i class="fa-solid fa-triangle-exclamation"></i> AI Diagnostic System: Active Weak-Area Reminders & Action Plan
+            </div>
+            <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 12px;" onclick="evaluateWeaknesses()">
+                <i class="fa-solid fa-arrows-rotate"></i> Re-Analyze
+            </button>
+        </div>
+        <div class="reminder-cards-grid" id="reminderCardsGrid">
+            <!-- Dynamic Weakness Reminders render here -->
+        </div>
+    </div>
+
+    <!-- DAILY VIEW SECTION -->
+    <div id="dailyViewSection" class="view-section">
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <div class="action-group">
+                <button class="btn" onclick="openModal('activityModal')"><i class="fa-solid fa-plus"></i> Add Custom Activity</button>
+                <button class="btn btn-green" onclick="openModal('habitModal')"><i class="fa-solid fa-fire"></i> Add Custom Habit</button>
+                <button class="btn btn-amber" onclick="openModal('priorityModal')"><i class="fa-solid fa-flag"></i> Add Priority</button>
+                <button class="btn btn-secondary" onclick="openModal('metricModal')"><i class="fa-solid fa-pen-to-square"></i> Log Daily Metrics</button>
+            </div>
+            <div style="font-size: 13px; color: var(--text-secondary);" id="statusText">
+                All changes auto-persist to Local Database.
+            </div>
+        </div>
+
+        <!-- Scores Grid -->
+        <div class="scores-grid">
+            <div class="score-card">
+                <div class="score-header">
+                    <span>Productivity</span>
+                    <div class="score-icon" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa;"><i class="fa-solid fa-bolt"></i></div>
+                </div>
+                <div class="score-val" id="score-prod">84</div>
+                <div class="score-bar"><div class="score-fill" id="fill-prod" style="width: 84%; background: #60a5fa;"></div></div>
+            </div>
+
+            <div class="score-card">
+                <div class="score-header">
+                    <span>Health</span>
+                    <div class="score-icon" style="background: rgba(16, 185, 129, 0.15); color: #34d399;"><i class="fa-solid fa-heart-pulse"></i></div>
+                </div>
+                <div class="score-val" id="score-health">88</div>
+                <div class="score-bar"><div class="score-fill" id="fill-health" style="width: 88%; background: #34d399;"></div></div>
+            </div>
+
+            <div class="score-card">
+                <div class="score-header">
+                    <span>Learning</span>
+                    <div class="score-icon" style="background: rgba(139, 92, 246, 0.15); color: #a78bfa;"><i class="fa-solid fa-graduation-cap"></i></div>
+                </div>
+                <div class="score-val" id="score-learn">82</div>
+                <div class="score-bar"><div class="score-fill" id="fill-learn" style="width: 82%; background: #a78bfa;"></div></div>
+            </div>
+
+            <div class="score-card">
+                <div class="score-header">
+                    <span>Fitness</span>
+                    <div class="score-icon" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24;"><i class="fa-solid fa-dumbbell"></i></div>
+                </div>
+                <div class="score-val" id="score-fit">85</div>
+                <div class="score-bar"><div class="score-fill" id="fill-fit" style="width: 85%; background: #fbbf24;"></div></div>
+            </div>
+
+            <div class="score-card">
+                <div class="score-header">
+                    <span>Discipline</span>
+                    <div class="score-icon" style="background: rgba(6, 182, 212, 0.15); color: #22d3ee;"><i class="fa-solid fa-shield-halved"></i></div>
+                </div>
+                <div class="score-val" id="score-disc">89</div>
+                <div class="score-bar"><div class="score-fill" id="fill-disc" style="width: 89%; background: #22d3ee;"></div></div>
+            </div>
+
+            <div class="score-card">
+                <div class="score-header">
+                    <span>Consistency</span>
+                    <div class="score-icon" style="background: rgba(244, 63, 94, 0.15); color: #fb7185;"><i class="fa-solid fa-fire"></i></div>
+                </div>
+                <div class="score-val" id="score-cons">86</div>
+                <div class="score-bar"><div class="score-fill" id="fill-cons" style="width: 86%; background: #fb7185;"></div></div>
+            </div>
+
+            <div class="score-card">
+                <div class="score-header">
+                    <span>Goal Hit %</span>
+                    <div class="score-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981;"><i class="fa-solid fa-trophy"></i></div>
+                </div>
+                <div class="score-val" id="score-goal">87.5%</div>
+                <div class="score-bar"><div class="score-fill" id="fill-goal" style="width: 87.5%; background: #10b981;"></div></div>
+            </div>
+        </div>
+
+        <!-- Daily Analytics Grid -->
+        <div class="analytics-grid">
+            <div class="card">
+                <div class="card-title">
+                    <span><i class="fa-solid fa-chart-line" style="color: #60a5fa;"></i> Daily Circadian Energy & Focus Density</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="energyChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <span><i class="fa-solid fa-chart-pie" style="color: #34d399;"></i> Daily Macronutrient & Hydration Split</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="macroChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Schedule & Habits Grid -->
+        <div class="main-grid">
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+                <div class="card">
+                    <div class="card-title">
+                        <span><i class="fa-solid fa-calendar-check" style="color: #a78bfa;"></i> Tomorrow's Custom Personalized Schedule</span>
+                        <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="openModal('activityModal')">+ Add Activity</button>
+                    </div>
+                    <div class="schedule-list" id="scheduleList"></div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">
+                        <span><i class="fa-solid fa-list-check" style="color: #fbbf24;"></i> Top Priorities (Non-Negotiable MITs)</span>
+                        <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="openModal('priorityModal')">+ Add Priority</button>
+                    </div>
+                    <div class="priority-list" id="priorityList"></div>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+                <div class="card">
+                    <div class="card-title">
+                        <span><i class="fa-solid fa-circle-check" style="color: #22d3ee;"></i> Habit Matrix & Streaks</span>
+                        <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="openModal('habitModal')">+ Add Habit</button>
+                    </div>
+                    <div class="habit-list" id="habitList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MONTHLY PROGRESS VIEW SECTION -->
+    <div id="monthlyViewSection" class="view-section hidden">
+        <div class="action-bar">
+            <div class="action-group">
+                <label style="font-weight: 700; font-size: 14px; color: var(--text-secondary);">Select Month:</label>
+                <select class="form-control" id="monthSelector" onchange="updateMonthlyView()">
+                    <option value="august_2026" selected>August 2026 (Current Month)</option>
+                    <option value="july_2026">July 2026</option>
+                    <option value="june_2026">June 2026</option>
+                    <option value="may_2026">May 2026</option>
+                </select>
+            </div>
+            <div style="font-size: 13px; color: var(--accent-green); font-weight: 600;">
+                <i class="fa-solid fa-arrow-trend-up"></i> Month-over-Month Growth Index: +4.8%
+            </div>
+        </div>
+
+        <div class="monthly-stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Monthly Avg Productivity</div>
+                <div class="stat-val" style="color: #60a5fa;">86.4 / 100</div>
+                <div class="stat-delta delta-up"><i class="fa-solid fa-caret-up"></i> +3.2% vs last month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Deep Work Hours</div>
+                <div class="stat-val" style="color: #a78bfa;">86.5 hrs</div>
+                <div class="stat-delta delta-up"><i class="fa-solid fa-caret-up"></i> +8.5 hrs target hit</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Workout Sessions Completed</div>
+                <div class="stat-val" style="color: #fbbf24;">22 Sessions</div>
+                <div class="stat-delta delta-up"><i class="fa-solid fa-caret-up"></i> 100% adherence</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Study & Skill Hours</div>
+                <div class="stat-val" style="color: #34d399;">44.0 hrs</div>
+                <div class="stat-delta delta-up"><i class="fa-solid fa-caret-up"></i> +12% comprehension</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <span><i class="fa-solid fa-chart-area" style="color: #8b5cf6;"></i> 30-Day Score Trajectory & Monthly Progress Curve</span>
+            </div>
+            <div class="chart-container" style="height: 320px;">
+                <canvas id="monthlyTrendChart"></canvas>
+            </div>
+        </div>
+
+        <div class="analytics-grid">
+            <div class="card">
+                <div class="card-title">
+                    <span><i class="fa-solid fa-border-all" style="color: #10b981;"></i> 30-Day Habit Adherence Heatmap Grid</span>
+                </div>
+                <div class="heatmap-grid" id="heatmapGrid"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="activityModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <span>➕ Add Custom Activity</span>
+            <button class="del-btn" onclick="closeModal('activityModal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <input type="text" class="form-control" id="actTime" placeholder="Time Window (e.g. 08:00 - 09:30 AM)">
+        <input type="text" class="form-control" id="actTitle" placeholder="Activity Title">
+        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+            <button class="btn btn-secondary" onclick="closeModal('activityModal')">Cancel</button>
+            <button class="btn" onclick="addCustomActivity()">Add Activity</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="habitModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <span>🔥 Add Custom Habit</span>
+            <button class="del-btn" onclick="closeModal('habitModal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <input type="text" class="form-control" id="habitTitle" placeholder="Habit Name">
+        <input type="number" class="form-control" id="habitStreak" placeholder="Streak Days" value="1">
+        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+            <button class="btn btn-secondary" onclick="closeModal('habitModal')">Cancel</button>
+            <button class="btn btn-green" onclick="addCustomHabit()">Add Habit</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="priorityModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <span>🎯 Add Custom Priority</span>
+            <button class="del-btn" onclick="closeModal('priorityModal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <input type="text" class="form-control" id="priorityText" placeholder="Priority Description">
+        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+            <button class="btn btn-secondary" onclick="closeModal('priorityModal')">Cancel</button>
+            <button class="btn btn-amber" onclick="addCustomPriority()">Add Priority</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="metricModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <span>📊 Update Daily Scores</span>
+            <button class="del-btn" onclick="closeModal('metricModal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div>
+                <label style="font-size: 12px; color: var(--text-secondary);">Productivity Score</label>
+                <input type="number" class="form-control" id="inputProd" value="84">
+            </div>
+            <div>
+                <label style="font-size: 12px; color: var(--text-secondary);">Health Score</label>
+                <input type="number" class="form-control" id="inputHealth" value="88">
+            </div>
+            <div>
+                <label style="font-size: 12px; color: var(--text-secondary);">Learning Score</label>
+                <input type="number" class="form-control" id="inputLearn" value="82">
+            </div>
+            <div>
+                <label style="font-size: 12px; color: var(--text-secondary);">Fitness Score</label>
+                <input type="number" class="form-control" id="inputFit" value="85">
+            </div>
+        </div>
+        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+            <button class="btn btn-secondary" onclick="closeModal('metricModal')">Cancel</button>
+            <button class="btn" onclick="updateScoresFromInput()">Update Metrics</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let state = {
+        schedule: [
+            { id: 1, time: "06:30 - 07:30 AM", desc: "🌅 Wake up, 750ml Hydration + Salt, 15m Sunlight Exposure & Mobility", checked: false },
+            { id: 2, time: "07:30 - 10:30 AM", desc: "⚡ FOCUS BLOCK I (Highest Priority Deep Work - Zero Interruptions)", checked: false },
+            { id: 3, time: "10:30 - 11:30 AM", desc: "📞 Communications, Email & Async Admin Tasks", checked: false },
+            { id: 4, time: "11:30 - 12:30 PM", desc: "🥗 Meal 1 (45g Protein + Complex Carbs)", checked: false },
+            { id: 5, time: "12:30 - 02:00 PM", desc: "⚡ FOCUS BLOCK II (System Design & Code Architecture)", checked: false },
+            { id: 6, time: "02:00 - 02:20 PM", desc: "🧠 NSDR Session (Non-Sleep Deep Rest / Energy Reset)", checked: false },
+            { id: 7, time: "05:00 - 06:15 PM", desc: "🏋️ FITNESS: Pull Hypertrophy Session (Back, Biceps, Rear Delts)", checked: false },
+            { id: 8, time: "07:00 - 08:30 PM", desc: "📚 LEARNING: Active Recall & Technical Mastery Session", checked: false },
+            { id: 9, time: "10:00 - 10:30 PM", desc: "📱 Digital Screen Shutdown & Sleep Initialization", checked: false }
+        ],
+        priorities: [
+            "Complete 3-hour Deep Work Block I on core feature with zero context-switching.",
+            "Execute Pull Hypertrophy Workout with progressive overload (+2.5kg on rows).",
+            "Complete 90-minute active recall study block on advanced caching & async state.",
+            "Hit 160g protein target across 4 balanced feeding windows.",
+            "Initiate digital screen cutoff strictly by 22:00."
+        ],
+        habits: [
+            { name: "Sunlight (15m)", streak: 14, checked: true },
+            { name: "Hydration (750ml)", streak: 21, checked: true },
+            { name: "Deep Work Block", streak: 9, checked: true },
+            { name: "Hypertrophy Session", streak: 5, checked: true },
+            { name: "Protein Target (150g+)", streak: 12, checked: true },
+            { name: "Digital Cutoff (22:00)", streak: 4, checked: false }
+        ],
+        scores: { productivity: 84, health: 88, learning: 82, fitness: 85, discipline: 89, consistency: 86, goal: 87.5 }
+    };
+
+    let monthlyChartInstance = null;
+
+    // AI WEAKNESS EVALUATOR ENGINE
+    function evaluateWeaknesses() {
+        const grid = document.getElementById('reminderCardsGrid');
+        if (!grid) return;
+        const weaknesses = [];
+
+        // 1. Learning Gap Check
+        if (state.scores.learning < 85) {
+            weaknesses.push({
+                tag: '📚 Learning Gap Detected',
+                text: `Learning Score is currently ${state.scores.learning}/100 (Target: ≥85).`,
+                remedy: 'Active recall retention dropped during evening study. Integrate 15 minutes of Feynman technique self-testing at 19:00 PM.',
+                actionText: '⚡ Fix Learning Routine',
+                actionFn: () => addScheduleItem('19:00 - 19:15 PM', '⚡ 15m Active Recall & Feynman Testing Session')
+            });
+        }
+
+        // 2. Unchecked Habit Slippage Check
+        const uncheckedHabits = state.habits.filter(h => !h.checked);
+        if (uncheckedHabits.length > 0) {
+            weaknesses.push({
+                tag: '⚠️ Habit Drift Warning',
+                text: `Habit "${uncheckedHabits[0].name}" is currently unchecked.`,
+                remedy: 'Inconsistency in nighttime digital cutoff reduces REM sleep quality by ~14%. Set a hard screen alarm at 21:45 PM.',
+                actionText: '📱 Set Digital Cutoff Alarm',
+                actionFn: () => alert('⏰ Digital Screen Alarm set for 21:45 PM!')
+            });
+        }
+
+        // 3. Circadian Energy Dip Check
+        if (state.scores.productivity < 85) {
+            weaknesses.push({
+                tag: '⚡ Productivity Slump',
+                text: `Productivity Score is ${state.scores.productivity}/100 with a 45m afternoon focus dip.`,
+                remedy: 'Post-lunch insulin surge causes alert drops. Integrate a 15-minute NSDR (Non-Sleep Deep Rest) session at 14:15 PM.',
+                actionText: '🧠 Schedule NSDR Session',
+                actionFn: () => addScheduleItem('14:15 - 14:30 PM', '🧠 15m NSDR Guided Energy Reset')
+            });
+        }
+
+        // Render Cards
+        grid.innerHTML = weaknesses.map((w, idx) => `
+            <div class="reminder-card">
+                <span class="reminder-tag">${w.tag}</span>
+                <div class="reminder-text">${w.text}</div>
+                <div class="reminder-remedy">${w.remedy}</div>
+                <button class="reminder-btn" onclick="triggerWeaknessAction(${idx})">${w.actionText}</button>
+            </div>
+        `).join('');
+
+        window._activeWeaknesses = weaknesses;
+    }
+
+    function triggerWeaknessAction(idx) {
+        if (window._activeWeaknesses && window._activeWeaknesses[idx]) {
+            window._activeWeaknesses[idx].actionFn();
+        }
+    }
+
+    function addScheduleItem(time, desc) {
+        state.schedule.unshift({ id: Date.now(), time, desc, checked: false });
+        render();
+        saveState();
+        alert(`✅ Added corrective action to schedule: "${desc}"`);
+    }
+
+    function switchTab(mode) {
+        if (mode === 'daily') {
+            document.getElementById('dailyViewSection').classList.remove('hidden');
+            document.getElementById('monthlyViewSection').classList.add('hidden');
+            document.getElementById('tabDaily').classList.add('active');
+            document.getElementById('tabMonthly').classList.remove('active');
+        } else {
+            document.getElementById('dailyViewSection').classList.add('hidden');
+            document.getElementById('monthlyViewSection').classList.remove('hidden');
+            document.getElementById('tabDaily').classList.remove('active');
+            document.getElementById('tabMonthly').classList.add('active');
+            renderMonthlyChart();
+            renderHeatmap();
+        }
+    }
+
+    function loadState() {
+        const saved = localStorage.getItem('ai_performance_db');
+        if (saved) {
+            try { state = JSON.parse(saved); } catch(e) {}
+        }
+        render();
+        evaluateWeaknesses();
+    }
+
+    function saveState() {
+        localStorage.setItem('ai_performance_db', JSON.stringify(state));
+        const status = document.getElementById('statusText');
+        if (status) {
+            status.innerText = "✅ Saved to Local Storage at " + new Date().toLocaleTimeString();
+            setTimeout(() => status.innerText = "All changes auto-persist to Local Database.", 3000);
+        }
+    }
+
+    function render() {
+        const schedEl = document.getElementById('scheduleList');
+        if (schedEl) {
+            schedEl.innerHTML = state.schedule.map((item, idx) => `
+                <div class="schedule-item">
+                    <div class="time-badge">${item.time}</div>
+                    <div class="schedule-desc">${item.desc}</div>
+                    <input type="checkbox" class="schedule-check" ${item.checked ? 'checked' : ''} onchange="toggleSchedule(${idx})">
+                    <button class="del-btn" onclick="deleteSchedule(${idx})"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+        }
+
+        const prioEl = document.getElementById('priorityList');
+        if (prioEl) {
+            prioEl.innerHTML = state.priorities.map((text, idx) => `
+                <div class="priority-item">
+                    <span class="priority-num">#${idx + 1}</span>
+                    <span class="priority-text">${text}</span>
+                    <button class="del-btn" onclick="deletePriority(${idx})"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+        }
+
+        const habitEl = document.getElementById('habitList');
+        if (habitEl) {
+            habitEl.innerHTML = state.habits.map((item, idx) => `
+                <div class="habit-item">
+                    <div class="habit-info">
+                        <input type="checkbox" class="schedule-check" ${item.checked ? 'checked' : ''} onchange="toggleHabit(${idx})">
+                        <span>${item.name}</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="streak-badge">🔥 ${item.streak} Days</span>
+                        <button class="del-btn" onclick="deleteHabit(${idx})"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        if (document.getElementById('score-prod')) {
+            document.getElementById('score-prod').innerText = state.scores.productivity;
+            document.getElementById('fill-prod').style.width = state.scores.productivity + '%';
+            document.getElementById('score-health').innerText = state.scores.health;
+            document.getElementById('fill-health').style.width = state.scores.health + '%';
+            document.getElementById('score-learn').innerText = state.scores.learning;
+            document.getElementById('fill-learn').style.width = state.scores.learning + '%';
+            document.getElementById('score-fit').innerText = state.scores.fitness;
+            document.getElementById('fill-fit').style.width = state.scores.fitness + '%';
+            document.getElementById('score-disc').innerText = state.scores.discipline;
+            document.getElementById('fill-disc').style.width = state.scores.discipline + '%';
+            document.getElementById('score-cons').innerText = state.scores.consistency;
+            document.getElementById('fill-cons').style.width = state.scores.consistency + '%';
+            document.getElementById('score-goal').innerText = state.scores.goal + '%';
+            document.getElementById('fill-goal').style.width = state.scores.goal + '%';
+        }
+    }
+
+    function renderMonthlyChart() {
+        const ctx = document.getElementById('monthlyTrendChart').getContext('2d');
+        if (monthlyChartInstance) monthlyChartInstance.destroy();
+
+        const days = Array.from({length: 30}, (_, i) => `Day ${i + 1}`);
+        const prodData = [80, 82, 85, 84, 88, 86, 89, 87, 85, 88, 90, 89, 86, 87, 91, 92, 88, 86, 89, 90, 88, 85, 87, 89, 91, 90, 88, 89, 90, 92];
+        const healthData = [85, 86, 88, 87, 89, 88, 90, 89, 88, 90, 91, 90, 89, 90, 92, 91, 89, 88, 90, 91, 89, 88, 90, 91, 92, 91, 90, 91, 92, 93];
+        const fitnessData = [78, 80, 82, 85, 84, 86, 85, 87, 88, 86, 85, 87, 89, 88, 90, 89, 88, 87, 89, 90, 88, 86, 88, 89, 90, 89, 88, 89, 90, 91];
+
+        monthlyChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: days,
+                datasets: [
+                    { label: 'Productivity', data: prodData, borderColor: '#60a5fa', tension: 0.3, borderWidth: 2 },
+                    { label: 'Health & Recovery', data: healthData, borderColor: '#34d399', tension: 0.3, borderWidth: 2 },
+                    { label: 'Fitness Adherence', data: fitnessData, borderColor: '#fbbf24', tension: 0.3, borderWidth: 2 }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'top', labels: { color: '#9ca3af' } } },
+                scales: {
+                    y: { min: 60, max: 100, grid: { color: 'rgba(255,255,255,0.05)' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    }
+
+    function renderHeatmap() {
+        const grid = document.getElementById('heatmapGrid');
+        if (!grid) return;
+        const daysInMonth = 31;
+        let html = '';
+        for (let i = 1; i <= daysInMonth; i++) {
+            let statusClass = 'cell-hit';
+            if (i === 7 || i === 18) statusClass = 'cell-miss';
+            else if (i === 12 || i === 24) statusClass = 'cell-partial';
+            html += `<div class="heatmap-cell ${statusClass}" title="August ${i}: Consistency Score">${i}</div>`;
+        }
+        grid.innerHTML = html;
+    }
+
+    function updateMonthlyView() {
+        renderMonthlyChart();
+        renderHeatmap();
+    }
+
+    function toggleSchedule(idx) { state.schedule[idx].checked = !state.schedule[idx].checked; saveState(); }
+    function deleteSchedule(idx) { state.schedule.splice(idx, 1); render(); saveState(); }
+    function addCustomActivity() {
+        const time = document.getElementById('actTime').value.trim();
+        const desc = document.getElementById('actTitle').value.trim();
+        if (!time || !desc) return alert('Enter time window & title!');
+        state.schedule.push({ id: Date.now(), time, desc, checked: false });
+        closeModal('activityModal'); render(); saveState(); evaluateWeaknesses();
+    }
+
+    function toggleHabit(idx) { state.habits[idx].checked = !state.habits[idx].checked; saveState(); evaluateWeaknesses(); }
+    function deleteHabit(idx) { state.habits.splice(idx, 1); render(); saveState(); evaluateWeaknesses(); }
+    function addCustomHabit() {
+        const name = document.getElementById('habitTitle').value.trim();
+        const streak = parseInt(document.getElementById('habitStreak').value) || 1;
+        if (!name) return alert('Enter habit name!');
+        state.habits.push({ name, streak, checked: true });
+        closeModal('habitModal'); render(); saveState(); evaluateWeaknesses();
+    }
+
+    function addCustomPriority() {
+        const text = document.getElementById('priorityText').value.trim();
+        if (!text) return alert('Enter priority!');
+        state.priorities.push(text);
+        closeModal('priorityModal'); render(); saveState();
+    }
+    function deletePriority(idx) { state.priorities.splice(idx, 1); render(); saveState(); }
+
+    function updateScoresFromInput() {
+        state.scores.productivity = parseInt(document.getElementById('inputProd').value) || 84;
+        state.scores.health = parseInt(document.getElementById('inputHealth').value) || 88;
+        state.scores.learning = parseInt(document.getElementById('inputLearn').value) || 82;
+        state.scores.fitness = parseInt(document.getElementById('inputFit').value) || 85;
+        closeModal('metricModal'); render(); saveState(); evaluateWeaknesses();
+    }
+
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadState();
+        const ctxEnergy = document.getElementById('energyChart').getContext('2d');
+        new Chart(ctxEnergy, {
+            type: 'line',
+            data: {
+                labels: ['07:00', '09:00', '11:00', '13:00', '15:00', '17:00', '19:00', '21:00'],
+                datasets: [{
+                    label: 'Focus Density (%)',
+                    data: [90, 95, 92, 75, 58, 85, 82, 65],
+                    borderColor: '#60a5fa',
+                    backgroundColor: 'rgba(96, 165, 250, 0.15)',
+                    fill: true, tension: 0.4
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        });
+
+        const ctxMacro = document.getElementById('macroChart').getContext('2d');
+        new Chart(ctxMacro, {
+            type: 'doughnut',
+            data: {
+                labels: ['Carbs', 'Protein', 'Fats'],
+                datasets: [{ data: [265*4, 154*4, 71*9], backgroundColor: ['#60a5fa', '#34d399', '#fbbf24'] }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, cutout: '70%' }
+        });
+    });
+</script>
+
+</body>
+</html>
